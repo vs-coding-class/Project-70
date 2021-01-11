@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, } from 'react-native';
+import db from '../config';
 
 export default class WriteStoryScreen extends React.Component {
     constructor() {
@@ -9,6 +10,14 @@ export default class WriteStoryScreen extends React.Component {
             author: '',
             story: '',
         }
+    }
+
+    submitStory = () => {
+        db.ref('stories/').update({
+            [this.state.title + ' by ' + this.state.author]: this.state.story,
+        });
+
+        this.setState({ title: '', author: '', story: '', });
     }
 
     render() {
@@ -40,7 +49,8 @@ export default class WriteStoryScreen extends React.Component {
                     placeholder={'Write your story...'} />
 
                 <TouchableOpacity
-                    style={styles.submitButton}>
+                    style={styles.submitButton}
+                    onPress={this.submitStory}>
                     <Text style={{ color: '#3A3042', fontSize: 20 }}>Submit</Text>
                 </TouchableOpacity>
             </View>
